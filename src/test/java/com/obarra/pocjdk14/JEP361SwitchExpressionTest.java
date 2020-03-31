@@ -3,10 +3,10 @@ package com.obarra.pocjdk14;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class JEP361SwitchExpressionsTest {
+class JEP361SwitchExpressionTest {
 
     /**
-     * Switch Expressions have attained permanent status, JEP361 is a Standard
+     * Switch Expression has attained permanent status, JEP361 is a Standard
      */
     @Test
     void switchExpressions() {
