@@ -11,12 +11,15 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
 }
 
-compileJava {
-    options.compilerArgs += ["--enable-preview"]
+tasks.withType(JavaCompile).each {
+    it.options.compilerArgs.add('--enable-preview')
+}
+
+test {
+    jvmArgs(['--enable-preview'])
 }
 
 test {
     // Use junit platform for unit tests
     useJUnitPlatform()
-    jvmArgs '--enable-preview'
 }

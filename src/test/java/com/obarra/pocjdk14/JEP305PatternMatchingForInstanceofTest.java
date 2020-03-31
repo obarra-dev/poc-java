@@ -14,12 +14,12 @@ class JEP305PatternMatchingForInstanceofTest {
     @Test
     void switchExpressions() {
         Object number = BigDecimal.TEN;
-        /**
+
         if (number instanceof BigDecimal bigDecimal) {
             System.out.println(bigDecimal);
             assertEquals(BigDecimal.class, bigDecimal.getClass());
         }
-         **/
+
     }
 
     @Test
