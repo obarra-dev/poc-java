@@ -24,6 +24,17 @@ class JEP305PatternMatchingForInstanceofTest {
         }
     }
 
+    /**
+     * here the Pattern matching is not necessary.
+     */
+    @Test
+    void instanceofWithPatternMatchingNegate() {
+        Object number = "this a string";
+        if (!(number instanceof BigDecimal bigDecimal)){
+            assertEquals(String.class, number.getClass());
+        }
+    }
+
     @Test
     void instanceofTraditional() {
         Object number = BigDecimal.TEN;
