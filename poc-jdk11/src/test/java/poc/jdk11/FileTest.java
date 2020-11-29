@@ -8,14 +8,18 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 class FileTest {
 
     @Test
     void writeString() throws IOException {
         var path = Files.createTempFile("tmp-filetest", ".txt");
-        var newPath = Files.writeString(path, "hi world\n omar");
+        Files.writeString(path, "hi world\r\nomar", StandardOpenOption.APPEND);
+        var newPath = Files.writeString(path, "\r\nbarra", StandardOpenOption.APPEND);
 
+        var expected = "hi world\r\nomar\r\nbarra";
+        Assertions.assertEquals(expected, Files.readString(path));
         Assertions.assertSame(path, newPath);
     }
 
