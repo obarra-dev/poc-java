@@ -22,7 +22,7 @@ class JEP323LocalVariableSyntaxForLambdaParameters {
 
         var result = myFunctionalOperation.doSomething(7, 5);
 
-        Assertions.assertEquals(2, result);
+        Assertions.assertEquals(12, result);
     }
 
 }

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * it is a Java compiler’s optimization to remove the bridge method access.
- *  Before Java 11, it creates a new access$000 bridge method for the nested private access automatically.
+ * Before Java 11, it creates a new access$000 bridge method for the nested private access automatically.
  */
 class JEP181NestBasedAccessControl {
 

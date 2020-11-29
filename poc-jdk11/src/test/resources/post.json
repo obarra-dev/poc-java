@@ -1,0 +1,16 @@
+{
+   "shipping":{
+      "id":123,
+      "items":[
+         {
+            "id":"kotlin book"
+         },
+         {
+            "id":"golang book"
+         },
+          {
+             "id":"java book"
+          }
+      ]
+   }
+}

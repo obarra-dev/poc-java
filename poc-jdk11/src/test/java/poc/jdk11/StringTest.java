@@ -21,7 +21,6 @@ class StringTest {
         });
     }
 
-
     @Test
     void lines() {
         var result = "omar\nbarra\njava".lines().collect(Collectors.toList());
