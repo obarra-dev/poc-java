@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
-class JEP323LocalVariableSintaxForLambdaParameters {
+//Is does not seems useful
+//to keep things uniform
+class JEP323LocalVariableSyntaxForLambdaParameters {
 
     @Test
     void varInLambdaParametersWhenUseNotNull() {
-        var der = Stream.of(1, 2, 3, 4, 5, null).filter((@NotNull var x) -> x < 3).count();
+        var der = Stream.of(1, 2, 3, 4, 5).filter((@NotNull var x) -> x < 3).count();
         Assertions.assertEquals(2, der);
     }
 
