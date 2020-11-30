@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group 'com.obarra'
+
+sourceCompatibility = JavaVersion.VERSION_12
+//sourceCompatibility = '12'
+
+repositories {
+    jcenter()
+}
+
+test {
+    jvmArgs(['--enable-preview'])
+}
+tasks.withType(JavaCompile).each {
+    it.options.compilerArgs.add('--enable-preview')
+}
+
+
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+}
+
+test {
+    // Use junit platform for unit tests
+    useJUnitPlatform()
+}
