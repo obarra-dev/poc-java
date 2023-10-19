@@ -29,7 +29,8 @@ class FileTest {
         var url = getClass().getClassLoader().getResource("words.txt");
         Path path = Paths.get(url.toURI());
 
-        var expected = "hi world 1 line\r\nomar 2 line";
+        var expected = "hi world 1 line\n" +
+                "omar 2 line";
         Assertions.assertEquals(expected, Files.readString(path));
     }
 }

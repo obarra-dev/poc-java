@@ -12,7 +12,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Paths;
 import java.time.Duration;
 
-class JEP321HTTPClient {
+class JEP321HTTPClientTest {
 
     /**
      * ofXxx when we are creating pre-defined handlers/subscribers.

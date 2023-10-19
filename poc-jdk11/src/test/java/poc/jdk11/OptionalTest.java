@@ -14,6 +14,16 @@ class OptionalTest {
 
         option = Optional.ofNullable("omar");
         Assertions.assertFalse(option.isEmpty());
+
+        option = Optional.ofNullable("");
+        Assertions.assertFalse(option.isEmpty());
+
+        option = Optional.ofNullable("   ");
+        Assertions.assertFalse(option.isEmpty());
+
+        // is preset is older, but empty is more easy to read
+        option = Optional.ofNullable("   ");
+        Assertions.assertTrue(option.isPresent());
     }
 
 }
