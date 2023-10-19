@@ -38,7 +38,7 @@ class JEP321HTTPClientTest {
     }
 
     @Test
-    void httpClientSend() throws InterruptedException, IOException {
+    void httpClientSendGet() throws InterruptedException, IOException {
         var httpClient = HttpClient.newHttpClient();
         var request = HttpRequest.newBuilder()
                 .uri(URI.create("https://en.wikipedia.org/w/rest.php/v1/page/Golang"))

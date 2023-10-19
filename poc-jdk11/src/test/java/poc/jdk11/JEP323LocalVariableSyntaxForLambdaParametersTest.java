@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 //Is does not seem useful
@@ -30,5 +32,16 @@ class JEP323LocalVariableSyntaxForLambdaParametersTest {
     void varInLambdaParametersWhenUseNotNull() {
         var der = Stream.of(1, 2, 3, 4, 5).filter((@NotNull var x) -> x < 3).count();
         Assertions.assertEquals(2, der);
+    }
+
+    @Test
+    void varInLambdaParametersWhenUseNotNullOtherExample() {
+        var sampleList = List.of("Java", "Kotlin");
+
+        String result = sampleList.stream()
+                .map((@NotNull var x) -> x.toUpperCase())
+                .collect(Collectors.joining(", "));
+
+        Assertions.assertEquals("JAVA, KOTLIN", result);
     }
 }
