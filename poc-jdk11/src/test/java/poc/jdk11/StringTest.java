@@ -10,6 +10,11 @@ class StringTest {
 
     @Test
     void isBlank() {
+        Assertions.assertTrue("".isBlank());
+    }
+
+    @Test
+    void isBlankWhenStringHasSpaces() {
         Assertions.assertTrue("   ".isBlank());
     }
 
@@ -28,11 +33,13 @@ class StringTest {
         Assertions.assertEquals(expected, result);
     }
 
-
     // strip is unicode-aware evolution of trim
     @Test
     void strip() {
         var s = "\n\t omar barra \u2005 ";
+        Assertions.assertEquals("omar barra", s.strip());
+
+        s = "  omar barra    ";
         Assertions.assertEquals("omar barra", s.strip());
     }
 
@@ -48,6 +55,7 @@ class StringTest {
         Assertions.assertEquals("\n\t omar barra", s.stripTrailing());
     }
 
+    // No-Break Space =  
     @Test
     void stripU00a0() {
         var s = "\n\t omar barra \u00a0 ";
@@ -64,5 +72,12 @@ class StringTest {
     void repeatWhenRepeatIsNegativeShouldBeThrowsIllegalArgumentException() {
         var s = "test";
         Assertions.assertThrows(IllegalArgumentException.class, () -> s.repeat(-1));
+    }
+
+    @Test
+    void repeatWhenRepeatIsNullShouldBeThrowsNullPointerException() {
+        var s = "test";
+        Integer n = null;
+        Assertions.assertThrows(NullPointerException.class, () -> s.repeat(n));
     }
 }
