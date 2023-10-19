@@ -15,6 +15,7 @@ import java.time.Duration;
 class JEP321HTTPClientTest {
 
     /**
+     * Standard HTTP Client featuring HTTP/2, WebSocket support and non-blocking API
      * ofXxx when we are creating pre-defined handlers/subscribers.
      */
     @Test
