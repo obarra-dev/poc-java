@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 // since java 9
-class ProcessAPITest {
+class JEP102ProcessAPITest {
 
     @Test
     void processHandle() {
