@@ -3,8 +3,10 @@ package poc.jdk11;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class OptionalTest {
@@ -62,5 +64,29 @@ class OptionalTest {
                 .orElseThrow();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result);
+    }
+
+    // since java 9
+    @Test
+    void orShouldReturnOtherOptional() {
+        var option = Optional.ofNullable(null);
+        var otherOptional = option.or(() -> Optional.of("otherOptional"));
+
+        Assertions.assertNotNull(otherOptional.get());
+    }
+
+    // since java 9
+    @Test
+    void ifPresentOrElse() {
+        var option = Optional.ofNullable(null);
+        option.ifPresentOrElse(System.out::println, () -> System.out.println("no data"));
+    }
+
+    // since java 9
+    @Test
+    void optionalToStream() {
+        var option = Optional.ofNullable("something");
+        var result = option.stream().collect(Collectors.toList());
+        Assertions.assertEquals(List.of("something"), result);
     }
 }
