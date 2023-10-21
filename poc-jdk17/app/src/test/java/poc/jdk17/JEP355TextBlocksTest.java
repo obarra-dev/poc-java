@@ -1,9 +1,10 @@
 package poc.jdk17;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-// JEP355
+// JEP355 (java13)
 class JEP355TextBlocksTest {
 
     @Test
@@ -38,6 +39,30 @@ class JEP355TextBlocksTest {
                 "    \"name\" : \"Omar\",\n" +
                 "    \"website\" : \"https://www.obarra.com/\"\n" +
                 "}\n", blockJSON);
+    }
+
+    // since java 15
+    @Test
+    void stripIndent() {
+        String htmlTextBlock = "<html>   \n"+
+                "\t<body>\t\t \n"+
+                "\t\t<p>Hello</p>  \t \n"+
+                "\t</body> \n"+
+                "</html>";
+        System.out.println(htmlTextBlock.replace(" ", "*"));
+        System.out.println(htmlTextBlock.stripIndent().replace(" ", "*"));
+
+        Assertions.assertEquals(htmlTextBlock.replace(" ", "*"), htmlTextBlock.stripIndent().replace(" ", "*"));
+    }
+
+    // since java 15
+    @Test
+    @Disabled("Disabled! I dont find the expected")
+    void translateEscapes() {
+        String str1 = "Hi\t\nHello' \" /u0022 Pankaj\r";
+
+        Assertions.assertEquals("Hi\t\n" +
+                "Hello' \" /u0022 Pankaj\n", str1.translateEscapes());
     }
 
 }
