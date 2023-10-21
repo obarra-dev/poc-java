@@ -3,7 +3,7 @@ package poc.jdk17;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-// JEP325, JEP54
+// JEP325, JEP354, JEP361
 class JEP325SwitchExpressionsTest {
 
     @Test

@@ -4,95 +4,53 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-// JEP355 (java13), JEP368
+// since java 14
+// JEP359
 class JEP359RecordsTest {
 
     @Test
-    void blocKText() {
-        // there is no need to escape double quote
-        String blockJSON = """
-                {
-                    "name" : "Omar",
-                    "website" : "https://www.obarra.com/"
-                }
-                """;
-        Assertions.assertEquals("{\n" +
-                "    \"name\" : \"Omar\",\n" +
-                "    \"website\" : \"https://www.obarra.com/\"\n" +
-                "}\n", blockJSON);
+    public void recordUsingGetter() {
+        User user = new User(10, "UserOne");
+
+        // it does not compile, it is immutable
+        // user.id = 12323;
+        Assertions.assertEquals(10, user.id());
+        Assertions.assertEquals("UserOne", user.password());
     }
 
-    // since java 14
     @Test
-    void blocKTextEscapeSequencesOne() {
-        //  \ does not add a new line
-        // This improves the readability of the sentence for a human eye
-        String blockJSON = """
-                {
-                    "name" : \
-                "Omar",
-                    "website" : "https://www.obarra.com/"
-                }
-                """;
-        Assertions.assertEquals("{\n" +
-                "    \"name\" : \"Omar\",\n" +
-                "    \"website\" : \"https://www.obarra.com/\"\n" +
-                "}\n", blockJSON);
+    public void recordUsingEqual() {
+        User user = new User(10, "UserOne");
+        User userTwo = new User(10, "UserOne");
+
+        Assertions.assertEquals(userTwo, user);
     }
 
-    // since java 14
     @Test
-    void blocKTextEscapeSequencesTwo() {
-        //  \s indicate a single space
-        String blockJSON =  """
-            line 1·······
-            line 2·······\s
-            """;;
-        Assertions.assertEquals("line 1·······\n" +
-                "line 2······· \n", blockJSON);
+    public void recordUsingToString() {
+        User user = new User(10, "UserOne");
+        Assertions.assertEquals("User[id=10, password=UserOne]", user.toString());
     }
 
-    // TODO work for just string?
-    // TODO test stripIndent(),translateEscapes(), formatted()
-    // since java 15
     @Test
-    void formatted() {
-        // there is no need to escape double quote
-        String blockJSON = """
-                {
-                    "name" : "%s",
-                    "website" : "https://www.%s.com/"
-                }
-                """.formatted("Omar", "obarra");
-
-        Assertions.assertEquals("{\n" +
-                "    \"name\" : \"Omar\",\n" +
-                "    \"website\" : \"https://www.obarra.com/\"\n" +
-                "}\n", blockJSON);
+    void recordTest() {
+        var person = new Person("Omar", 29);
+        Assertions.assertEquals("Omar", person.firstName());
+        Assertions.assertEquals(29, person.age());
+        Assertions.assertEquals("OMAR", person.getNickName());
+        Assertions.assertEquals("Person[firstName=Omar, age=29]", person.toString());
+        Assertions.assertTrue(person.equals(new Person("Omar", 29)));
+        Assertions.assertFalse(person.equals(new Person("Omarx", 29)));
+        Assertions.assertNotNull(person.hashCode());
     }
 
-    // since java 15
+    /**
+     *  Compact Constructor is a point to validation and/or normalization code need to be given in the constructor body.
+     */
     @Test
-    void stripIndent() {
-        String htmlTextBlock = "<html>   \n"+
-                "\t<body>\t\t \n"+
-                "\t\t<p>Hello</p>  \t \n"+
-                "\t</body> \n"+
-                "</html>";
-        System.out.println(htmlTextBlock.replace(" ", "*"));
-        System.out.println(htmlTextBlock.stripIndent().replace(" ", "*"));
-
-        Assertions.assertEquals(htmlTextBlock.replace(" ", "*"), htmlTextBlock.stripIndent().replace(" ", "*"));
+    void compactConstructor() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new Person("Omar", -1);
+        });
     }
-
-    // since java 15
-    @Test
-    @Disabled("Disabled! I dont find the expected")
-    void translateEscapes() {
-        String str1 = "Hi\t\nHello' \" /u0022 Pankaj\r";
-
-        Assertions.assertEquals("Hi\t\n" +
-                "Hello' \" /u0022 Pankaj\n", str1.translateEscapes());
-    }
-
 }

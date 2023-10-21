@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-// JEP355 (java13)
+// JEP355 (java13), JEP368
 class JEP355TextBlocksTest {
 
     @Test
@@ -20,6 +20,36 @@ class JEP355TextBlocksTest {
                 "    \"name\" : \"Omar\",\n" +
                 "    \"website\" : \"https://www.obarra.com/\"\n" +
                 "}\n", blockJSON);
+    }
+
+    // since java 14
+    @Test
+    void blocKTextEscapeSequencesOne() {
+        //  \ does not add a new line
+        // This improves the readability of the sentence for a human eye
+        String blockJSON = """
+                {
+                    "name" : \
+                "Omar",
+                    "website" : "https://www.obarra.com/"
+                }
+                """;
+        Assertions.assertEquals("{\n" +
+                "    \"name\" : \"Omar\",\n" +
+                "    \"website\" : \"https://www.obarra.com/\"\n" +
+                "}\n", blockJSON);
+    }
+
+    // since java 14
+    @Test
+    void blocKTextEscapeSequencesTwo() {
+        //  \s indicate a single space
+        String blockJSON =  """
+            line 1·······
+            line 2·······\s
+            """;;
+        Assertions.assertEquals("line 1·······\n" +
+                "line 2······· \n", blockJSON);
     }
 
     // TODO work for just string?

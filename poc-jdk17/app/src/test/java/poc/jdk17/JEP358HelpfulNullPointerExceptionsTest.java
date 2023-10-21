@@ -1,4 +1,4 @@
-package com.obarra.pocjdk14;
+package poc.jdk17;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -7,10 +7,14 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JEP358HelpfulNullPointerExceptionTest {
-
+//  Java has made this easier by adding the capability to point out what exactly was null in a given line of code.
+// since java 14
+// JEP358
+class JEP358HelpfulNullPointerExceptionsTest {
     @Test
     void helpfulNullPointerExceptionTest() {
+        // now you can see this log
+        // Cannot invoke "java.math.BigDecimal.add(java.math.BigDecimal)" because "myVariable" is null
         Assertions.assertThrows(NullPointerException.class, () -> {
             bigDecimalAdd();
         });
@@ -20,7 +24,7 @@ public class JEP358HelpfulNullPointerExceptionTest {
         try {
             BigDecimal myVariable = null;
             myVariable.add(BigDecimal.TEN);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
             throw new NullPointerException();
         }
@@ -28,6 +32,8 @@ public class JEP358HelpfulNullPointerExceptionTest {
 
     @Test
     void helpfulNullPointerExceptionMapPutGet() {
+        // now you can see this log
+        // Cannot invoke "java.math.BigDecimal.add(java.math.BigDecimal)" because the return value of "java.util.Map.get(Object)" is null
         Assertions.assertThrows(NullPointerException.class, () -> {
             mapPutGet();
         });
@@ -39,7 +45,7 @@ public class JEP358HelpfulNullPointerExceptionTest {
             Map<String, BigDecimal> map = new HashMap<>();
             map.put("first", myVariable);
             map.get("first").add(BigDecimal.TEN);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
             throw new NullPointerException();
         }
