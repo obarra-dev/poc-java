@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class JEP305PatternMatchingInstanceofTest {
+
+    // since java 14
     @Test
-    void transform() {
+    void patternMatching() {
         Object obj = "Golang";
         if (obj instanceof String s) {
             int length = s.length();
