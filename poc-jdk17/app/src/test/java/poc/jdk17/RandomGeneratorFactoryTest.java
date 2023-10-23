@@ -4,47 +4,22 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Arrays;
+import java.util.random.RandomGeneratorFactory;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 class RandomGeneratorFactoryTest {
-    @Test
-    void indent() {
-        var text = "Hello Team!\nThis is Java 12.";
-
-        var result = text.indent(10);
-        Assertions.assertEquals("          Hello Team!\n" +
-                "          This is Java 12.\n", result);
-
-        result = result.indent(-10);
-        Assertions.assertEquals("Hello Team!\n" +
-                "This is Java 12.\n", result);
-
-        result = text.indent(-10);
-        Assertions.assertEquals("Hello Team!\n" +
-                "This is Java 12.\n", result);
-    }
 
     @Test
-    void transform() {
-        String text = "Golang";
-        String result = text.transform(value ->
-                new StringBuilder(value).reverse().toString()
-        );
+    void newRandomGenerator() {
+        IntStream l128X256MixRandom = RandomGeneratorFactory.of("L128X256MixRandom")
+                .create()
+                .ints(10, 0, 100);
 
-        Assertions.assertEquals("gnaloG", result);
+        int[] ints = l128X256MixRandom.toArray();
+
+        Assertions.assertEquals(10, ints.length);
     }
 
-    @Test
-    void describeConstable() {
-        String text = "Golang";
-        var result = text.describeConstable();
-        Assertions.assertEquals("Golang", result.get());
-    }
-
-    @Test
-    void resolveConstantDesc() {
-        String text = "Golang";
-        // TODO why?
-        String result = text.resolveConstantDesc(MethodHandles.lookup());
-        Assertions.assertEquals("Golang", result);
-    }
 }
