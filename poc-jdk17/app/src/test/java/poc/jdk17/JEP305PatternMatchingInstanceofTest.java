@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-// JEP305, JEP375
+// JEP305, JEP375, JEP394
 class JEP305PatternMatchingInstanceofTest {
 
     // since java 14

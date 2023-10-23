@@ -14,7 +14,7 @@ import java.util.Optional;
 //Every permitted subclass must explicitly extend the sealed class.
 //Every permitted subclass must define a modifier: final, sealed, or non-sealed.
 // since java 15
-// JEP360,
+// JEP360, JEP397
 class JEP360SealedClassesTest {
 
     @Test

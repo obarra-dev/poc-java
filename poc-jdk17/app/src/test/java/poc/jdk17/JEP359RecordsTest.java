@@ -1,35 +1,34 @@
 package poc.jdk17;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 // since java 14
-// JEP359, JEP384
+// JEP359, JEP384, JEP395
 class JEP359RecordsTest {
 
     @Test
     public void recordUsingGetter() {
-        User user = new User(10, "UserOne");
+        UserRecord userRecord = new UserRecord(10, "UserOne");
 
         // it does not compile, it is immutable
         // user.id = 12323;
-        Assertions.assertEquals(10, user.id());
-        Assertions.assertEquals("UserOne", user.password());
+        Assertions.assertEquals(10, userRecord.id());
+        Assertions.assertEquals("UserOne", userRecord.password());
     }
 
     @Test
     public void recordUsingEqual() {
-        User user = new User(10, "UserOne");
-        User userTwo = new User(10, "UserOne");
+        UserRecord userRecord = new UserRecord(10, "UserOne");
+        UserRecord userRecordTwo = new UserRecord(10, "UserOne");
 
-        Assertions.assertEquals(userTwo, user);
+        Assertions.assertEquals(userRecordTwo, userRecord);
     }
 
     @Test
     public void recordUsingToString() {
-        User user = new User(10, "UserOne");
-        Assertions.assertEquals("User[id=10, password=UserOne]", user.toString());
+        UserRecord userRecord = new UserRecord(10, "UserOne");
+        Assertions.assertEquals("UserRecord[id=10, password=UserOne]", userRecord.toString());
     }
 
     @Test
@@ -52,5 +51,14 @@ class JEP359RecordsTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Person("Omar", -1);
         });
+    }
+
+    @Test
+    public void defineRecordsAsClassMembersOfInnerClasses() {
+        OuterClass outerClass = new OuterClass();
+        OuterClass.InnerClass innerClass = outerClass.new InnerClass();
+
+        Assertions.assertEquals(123, innerClass.userRecord.id());
+        Assertions.assertEquals("userFromInnerClass", innerClass.userRecord.password());
     }
 }
