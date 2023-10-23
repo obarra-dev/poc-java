@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 // since java 14
-// JEP359
+// JEP359, JEP384
 class JEP359RecordsTest {
 
     @Test
