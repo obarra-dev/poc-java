@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 class DateTimeFormatterTest {
 
+    // since java 16
     @Test
     void periodOfDaySymbolB() {
         var date = LocalTime.parse("15:25:08.690791");
