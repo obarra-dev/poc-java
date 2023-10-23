@@ -12,20 +12,24 @@ import java.lang.reflect.Proxy;
 
 class InterfaceTest {
 
-    // TODO make it works!!
-    @Disabled
     @Test
-    void indent() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Object proxy = Proxy.   newProxyInstance(ClassLoader.getSystemClassLoader(), new Class<?>[] { VehicleInterface.class },
-                (prox, method, args) -> {
-                    if (method.isDefault()) {
-                        return InvocationHandler.invokeDefault(prox, method, args);
+    void nowCanInvokeDefaultMethodsUsingReflection() {
+        GreetingInterface greetingProxy = (GreetingInterface) Proxy.newProxyInstance(
+                InterfaceTest.class.getClassLoader(),
+                new Class[]{GreetingInterface.class},
+                (proxy, method, args) -> {
+                    if (method.getName().equals("getName")) {
+                        return "Omar";
+                    } else if (method.isDefault()) {
+                        return InvocationHandler.invokeDefault(proxy, method, args);
+                    } else {
+                        throw new IllegalStateException(
+                                "Method not implemented: " + method);
                     }
-                    return prox;
-                }
-        );
-        Method method = proxy.getClass().getMethod("hello");
-        Assertions.assertEquals(method.invoke(proxy), "dss");
+                });
+
+        Assertions.assertEquals("Omar", greetingProxy.getName());
+        Assertions.assertEquals("Hello, Omar from GreetingInterface", greetingProxy.greet());
     }
 
 }
