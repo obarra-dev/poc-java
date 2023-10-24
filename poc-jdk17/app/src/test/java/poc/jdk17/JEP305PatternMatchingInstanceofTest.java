@@ -13,7 +13,7 @@ class JEP305PatternMatchingInstanceofTest {
 
     // since java 14
     @Test
-    void patternMatching() {
+    void patternMatchingString() {
         Object obj = "Golang";
         if (obj instanceof String s) {
             // the compiler detects it is a string, now we can use its methods
@@ -35,7 +35,7 @@ class JEP305PatternMatchingInstanceofTest {
 
 
     @Test
-    void instanceofWithPatternMatching() {
+    void patternMatchingBigDecimal() {
         Object number = BigDecimal.TEN;
 
         if (number instanceof BigDecimal bigDecimal) {
