@@ -8,8 +8,8 @@ public sealed class WagonSealedClass extends VehicleSealedAbstractClass implemen
 
 
     @Override
-    public String getImplementedMethod() {
-        return "WagonSealedClass";
+    public String getRegistrationNumberByOverrideMethod() {
+        return registrationNumber + " by override method in WagonSealedClass";
     }
 
 }

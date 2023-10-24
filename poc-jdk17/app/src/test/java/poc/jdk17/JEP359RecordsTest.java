@@ -33,13 +33,13 @@ class JEP359RecordsTest {
 
     @Test
     void recordTest() {
-        var person = new Person("Omar", 29);
+        var person = new PersonRecord("Omar", 29);
         Assertions.assertEquals("Omar", person.firstName());
         Assertions.assertEquals(29, person.age());
         Assertions.assertEquals("OMAR", person.getNickName());
         Assertions.assertEquals("Person[firstName=Omar, age=29]", person.toString());
-        Assertions.assertTrue(person.equals(new Person("Omar", 29)));
-        Assertions.assertFalse(person.equals(new Person("Omarx", 29)));
+        Assertions.assertTrue(person.equals(new PersonRecord("Omar", 29)));
+        Assertions.assertFalse(person.equals(new PersonRecord("Omarx", 29)));
         Assertions.assertNotNull(person.hashCode());
     }
 
@@ -49,7 +49,7 @@ class JEP359RecordsTest {
     @Test
     void compactConstructor() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new Person("Omar", -1);
+            new PersonRecord("Omar", -1);
         });
     }
 

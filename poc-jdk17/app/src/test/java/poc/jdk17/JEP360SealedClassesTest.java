@@ -18,42 +18,97 @@ import java.util.Optional;
 class JEP360SealedClassesTest {
 
     @Test
-    void patterMatchingWithSealedClasses() {
-        var result = getImplementedMethod(new CarNonSealedClass("123"));
-        Assertions.assertEquals("CarNonSealedClass", result);
+    void patterMatchingWithSealedInterface() {
+        var result = getRegistrationNumberByOverrideMethod(new CarNonSealedClass("123"));
+        Assertions.assertEquals("123 by override method in CarNonSealedClass", result);
 
-        result = getImplementedMethod(new TruckFinalClass("123"));
-        Assertions.assertEquals("TruckFinalClass", result);
+        result = getRegistrationNumberByOverrideMethod(new TruckFinalClass("123"));
+        Assertions.assertEquals("123 by override method in TruckFinalClass", result);
 
-        result = getImplementedMethod(new WagonSealedClass("123"));
-        Assertions.assertEquals("WagonSealedClass", result);
+        result = getRegistrationNumberByOverrideMethod(new WagonSealedClass("123"));
+        Assertions.assertEquals("123 by override method in WagonSealedClass", result);
 
-        result = getImplementedMethod(new WagonBolivia("123"));
-        Assertions.assertEquals("WagonSealedClass", result);
+        result = getRegistrationNumberByOverrideMethod(new WagonBolivia("123"));
+        Assertions.assertEquals("123 by override method in WagonSealedClass", result);
     }
 
-    private static String getImplementedMethod(VehicleSealedAbstractClass vehicle) {
+    private static String getRegistrationNumberByOverrideMethod(ServiceSealedInterface vehicle) {
         String result;
         if (vehicle instanceof CarNonSealedClass car) {
-            result = car.getImplementedMethod();
+            result = car.getRegistrationNumberByOverrideMethod();
         } else if (vehicle instanceof TruckFinalClass truck) {
-            result = truck.getImplementedMethod();
+            result = truck.getRegistrationNumberByOverrideMethod();
         } else if (vehicle instanceof WagonSealedClass wagon) {
-            result = wagon.getImplementedMethod();
+            result = wagon.getRegistrationNumberByOverrideMethod();
         } else {
             throw new RuntimeException("Unknown instance of Vehicle");
         }
         return result;
     }
 
+
+    //
+    @Test
+    void patterMatchingWithSealedClass() {
+        var result = getRegistrationNumberByOverrideMethodUsingVehicleSealedAbstractClass(new CarNonSealedClass("123"));
+        Assertions.assertEquals("123 by override method in CarNonSealedClass 123 by VehicleSealedAbstractClass", result);
+
+        result = getRegistrationNumberByOverrideMethodUsingVehicleSealedAbstractClass(new TruckFinalClass("123"));
+        Assertions.assertEquals("123 by override method in TruckFinalClass 123 by VehicleSealedAbstractClass", result);
+
+        result = getRegistrationNumberByOverrideMethodUsingVehicleSealedAbstractClass(new WagonSealedClass("123"));
+        Assertions.assertEquals("123 by override method in WagonSealedClass 123 by VehicleSealedAbstractClass", result);
+
+        result = getRegistrationNumberByOverrideMethodUsingVehicleSealedAbstractClass(new WagonBolivia("123"));
+        Assertions.assertEquals("123 by override method in WagonSealedClass 123 by VehicleSealedAbstractClass", result);
+    }
+
+    private static String getRegistrationNumberByOverrideMethodUsingVehicleSealedAbstractClass(VehicleSealedAbstractClass vehicle) {
+        String result;
+        if (vehicle instanceof CarNonSealedClass car) {
+            result = car.getRegistrationNumberByOverrideMethod();
+        } else if (vehicle instanceof TruckFinalClass truck) {
+            result = truck.getRegistrationNumberByOverrideMethod();
+        } else if (vehicle instanceof WagonSealedClass wagon) {
+            result = wagon.getRegistrationNumberByOverrideMethod();
+        } else {
+            throw new RuntimeException("Unknown instance of Vehicle");
+        }
+        return result + vehicle.getRegistrationNumberByMethodFromAbstractClass();
+    }
+
+    // Since records are implicitly final, the sealed hierarchy is even more concise
+    @Test
+    void patterMatchingWithSealedClassAndRecord() {
+        var result = getRegistrationNumberByOverrideMethod(new CarRecord("123"));
+        Assertions.assertEquals("123 by override method in CarRecord", result);
+
+        result = getRegistrationNumberByOverrideMethod(new TruckRecord("123"));
+        Assertions.assertEquals("123 by override method in TruckRecord", result);
+    }
+
+    private static String getRegistrationNumberByOverrideMethod(VehicleSealedInterface vehicle) {
+        String result;
+        if (vehicle instanceof CarRecord car) {
+            result = car.getRegistrationNumberByOverrideMethod();
+        } else if (vehicle instanceof TruckRecord truck) {
+            result = truck.getRegistrationNumberByOverrideMethod();
+        } else {
+            throw new RuntimeException("Unknown instance of Vehicle");
+        }
+
+        return result;
+    }
+
+    // TODO difference sealed and final??
     @Test
     void patterMatchingWithNoSealedClasses() {
-        PersonAbstractClass person = new Employee();
+        PersonAbstractClass person = new EmployeeFinal();
 
         String result;
-        if (person instanceof Employee employee) {
+        if (person instanceof EmployeeFinal employee) {
             result = employee.getEmployeeName();
-        } else if (person instanceof Manager manager) {
+        } else if (person instanceof ManagerNormalClass manager) {
             result = manager.getManagerName();
         } else {
             throw new RuntimeException("Unknown instance of Vehicle");

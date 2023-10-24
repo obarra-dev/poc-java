@@ -1,10 +1,10 @@
 package poc.jdk17;
 
-public record Person(
+public record PersonRecord(
         String firstName,
         int age
 ) {
-    public Person {
+    public PersonRecord {
         if (age < 0) {
             throw new IllegalArgumentException("Age must be greater than 0!");
         }

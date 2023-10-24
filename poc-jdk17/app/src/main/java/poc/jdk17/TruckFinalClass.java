@@ -8,8 +8,8 @@ public final class TruckFinalClass extends VehicleSealedAbstractClass implements
 
 
     @Override
-    public String getImplementedMethod() {
-        return "TruckFinalClass";
+    public String getRegistrationNumberByOverrideMethod() {
+        return registrationNumber + " by override method in TruckFinalClass";
     }
 
 }

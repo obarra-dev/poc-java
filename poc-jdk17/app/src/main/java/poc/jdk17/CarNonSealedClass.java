@@ -8,8 +8,8 @@ public non-sealed class CarNonSealedClass extends VehicleSealedAbstractClass imp
     }
 
     @Override
-    public String getImplementedMethod() {
-        return "CarNonSealedClass";
+    public String getRegistrationNumberByOverrideMethod() {
+        return registrationNumber + " by override method in CarNonSealedClass";
     }
 
 }

@@ -8,8 +8,8 @@ public abstract sealed class VehicleSealedAbstractClass permits CarNonSealedClas
         this.registrationNumber = registrationNumber;
     }
 
-    public String getRegistrationNumber() {
-        return registrationNumber;
+    public String getRegistrationNumberByMethodFromAbstractClass() {
+        return " " + registrationNumber + " by VehicleSealedAbstractClass";
     }
 
 }
