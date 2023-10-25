@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -19,6 +21,8 @@ class JEP305PatternMatchingInstanceofTest {
             // the compiler detects it is a string, now we can use its methods
             int length = s.length();
             Assertions.assertEquals(6, length);
+        } else {
+            fail();
         }
     }
 
@@ -30,6 +34,8 @@ class JEP305PatternMatchingInstanceofTest {
         if (obj instanceof String s && s.length() > 4) {
             int length = s.length();
             Assertions.assertEquals(6, length);
+        } else {
+            fail();
         }
     }
 
@@ -45,6 +51,32 @@ class JEP305PatternMatchingInstanceofTest {
         } else {
             fail();
         }
+    }
+
+    @Test
+    void patternMatchingMoreCases() {
+        assertEquals("1", asStringValue(BigDecimal.ONE));
+        assertEquals("12343242", asStringValue("12343242"));
+        assertEquals("123", asStringValue(123));
+        assertEquals("-999999999-01-01", asStringValue(LocalDate.MIN));
+        assertEquals("unknown", asStringValue(Double.MIN_VALUE));
+    }
+
+    private String asStringValue(Object anyValue) {
+        String result;
+        if (anyValue instanceof String str) {
+            result = str;
+        } else if (anyValue instanceof BigDecimal bd) {
+            result = bd.toEngineeringString();
+        } else if (anyValue instanceof Integer i) {
+            result = Integer.toString(i);
+        } else if (anyValue instanceof LocalDate ld) {
+            result = ld.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        } else {
+            result = "unknown";
+        }
+
+        return result;
     }
 
     /**
