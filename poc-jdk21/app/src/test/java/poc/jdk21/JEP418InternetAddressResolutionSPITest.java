@@ -3,30 +3,20 @@ package poc.jdk21;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 class JEP418InternetAddressResolutionSPITest {
     @Test
-    void defaultEncodingIsUTF8() {
-        Assertions.assertEquals("UTF-8", Charset.defaultCharset().toString());
-        Assertions.assertEquals("UTF-8", System.getProperty("file.encoding"));
-        Assertions.assertEquals("UTF-8", System.getProperty("file.encoding"));
-    }
+    void defaultEncodingIsUTF8() throws UnknownHostException {
+        InetAddress[] addresses = InetAddress.getAllByName("www.baeldung.com");
+        List<String> list = Arrays.stream(addresses).map(InetAddress::getHostAddress).toList();
 
-    @Test
-    void defaultEncodingIsUTF8WandR() throws IOException {
-        try (FileWriter fw = new FileWriter("happy-coding.txt");
-             BufferedWriter bw = new BufferedWriter(fw)) {
-            bw.write("ハッピーコーディング！");
-        }
+        List<String> expected = List.of("172.66.43.8", "172.66.40.248",
+                "2606:4700:3108:0:0:0:ac42:2b08", "2606:4700:3108:0:0:0:ac42:28f8");
 
-        String result = Files.readString(Path.of("happy-coding.txt"));
-
-        Assertions.assertEquals("ハッピーコーディング！", result);
+        Assertions.assertEquals(expected, list);
     }
 }
