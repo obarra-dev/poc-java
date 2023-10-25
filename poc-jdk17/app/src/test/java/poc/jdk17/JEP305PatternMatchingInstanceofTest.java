@@ -60,6 +60,9 @@ class JEP305PatternMatchingInstanceofTest {
         assertEquals("123", asStringValue(123));
         assertEquals("-999999999-01-01", asStringValue(LocalDate.MIN));
         assertEquals("unknown", asStringValue(Double.MIN_VALUE));
+
+        // notice it does not throw null pointer
+        assertEquals("unknown", asStringValue(null));
     }
 
     private String asStringValue(Object anyValue) {
