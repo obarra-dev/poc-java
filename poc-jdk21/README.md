@@ -30,3 +30,28 @@
 ## 438:	Vector API (Fifth Incubator)
 
 
+TODO to complete
+patter mattins for sei
+record patters ya es oficial en java
+sequences
+
+
+TODO ver el fix Bugfix in the Exhaustiveness Analysis with Sealed Types
+https://www.happycoders.eu/java/java-18-features/
+
+
+TODO to start
+Virtual Threads  -> finalized since java 19
+Reimplement Core Reflection with Method Handles -> finalized since java 18
+Foreign Function & Memory API (Third Preview) since java 14
+Vector API (Sixth Incubator) since 16
+Structured Concurrency (Preview)  since java 19
+Scoped Values (Preview) since java 21
+String Templates (Preview) since java 21
+Unnamed Patterns and Variables (Preview) since java 21
+
+
+
+groso
+https://belief-driven-design.com/looking-at-java-21-switch-pattern-matching-14648/
+

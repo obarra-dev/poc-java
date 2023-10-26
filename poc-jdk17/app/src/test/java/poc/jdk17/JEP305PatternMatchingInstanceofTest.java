@@ -10,20 +10,37 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+// since java 14
 // JEP305, JEP375, JEP394
 class JEP305PatternMatchingInstanceofTest {
 
-    // since java 14
     @Test
-    void patternMatchingString() {
-        Object obj = "Golang";
-        if (obj instanceof String s) {
-            // the compiler detects it is a string, now we can use its methods
-            int length = s.length();
-            Assertions.assertEquals(6, length);
+    void patternMatchingMoreCases() {
+        assertEquals("1", getStringValue(BigDecimal.ONE));
+        assertEquals("12343242", getStringValue("12343242"));
+        assertEquals("123", getStringValue(123));
+        assertEquals("-999999999-01-01", getStringValue(LocalDate.MIN));
+        assertEquals("unknown", getStringValue(Double.MIN_VALUE));
+
+        // notice it does not throw null pointer
+        assertEquals("unknown", getStringValue(null));
+    }
+
+    private String getStringValue(Object anyValue) {
+        String result;
+        if (anyValue instanceof String str) {
+            result = str;
+        } else if (anyValue instanceof BigDecimal bd) {
+            result = bd.toEngineeringString();
+        } else if (anyValue instanceof Integer i) {
+            result = Integer.toString(i);
+        } else if (anyValue instanceof LocalDate ld) {
+            result = ld.format(DateTimeFormatter.ISO_LOCAL_DATE);
         } else {
-            fail();
+            result = "unknown";
         }
+
+        return result;
     }
 
     @Test
@@ -41,6 +58,32 @@ class JEP305PatternMatchingInstanceofTest {
 
 
     @Test
+    void instanceofWithRecord() {
+        Object object = new PersonRecord("omar", 12);
+
+        if (object instanceof PersonRecord personRecord) {
+            // the compiler detects it is a PersonRecord, now we can use its methods
+            assertEquals(new PersonRecord("omar", 12), personRecord);
+            assertEquals("omar", personRecord.firstName());
+            assertEquals(PersonRecord.class, personRecord.getClass());
+        } else {
+            fail();
+        }
+    }
+
+    @Test
+    void patternMatchingString() {
+        Object obj = "Golang";
+        if (obj instanceof String s) {
+            // the compiler detects it is a string, now we can use its methods
+            int length = s.length();
+            Assertions.assertEquals(6, length);
+        } else {
+            fail();
+        }
+    }
+
+    @Test
     void patternMatchingBigDecimal() {
         Object number = BigDecimal.TEN;
 
@@ -51,35 +94,6 @@ class JEP305PatternMatchingInstanceofTest {
         } else {
             fail();
         }
-    }
-
-    @Test
-    void patternMatchingMoreCases() {
-        assertEquals("1", asStringValue(BigDecimal.ONE));
-        assertEquals("12343242", asStringValue("12343242"));
-        assertEquals("123", asStringValue(123));
-        assertEquals("-999999999-01-01", asStringValue(LocalDate.MIN));
-        assertEquals("unknown", asStringValue(Double.MIN_VALUE));
-
-        // notice it does not throw null pointer
-        assertEquals("unknown", asStringValue(null));
-    }
-
-    private String asStringValue(Object anyValue) {
-        String result;
-        if (anyValue instanceof String str) {
-            result = str;
-        } else if (anyValue instanceof BigDecimal bd) {
-            result = bd.toEngineeringString();
-        } else if (anyValue instanceof Integer i) {
-            result = Integer.toString(i);
-        } else if (anyValue instanceof LocalDate ld) {
-            result = ld.format(DateTimeFormatter.ISO_LOCAL_DATE);
-        } else {
-            result = "unknown";
-        }
-
-        return result;
     }
 
     /**

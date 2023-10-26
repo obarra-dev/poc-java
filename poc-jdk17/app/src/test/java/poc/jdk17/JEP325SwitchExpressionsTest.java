@@ -3,6 +3,8 @@ package poc.jdk17;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+// improve the readability
+// since java 12
 // JEP325, JEP354, JEP361
 class JEP325SwitchExpressionsTest {
 
@@ -19,24 +21,7 @@ class JEP325SwitchExpressionsTest {
     }
 
     @Test
-    void switchUsingYield() {
-        var day = "asado";
-        var result = switch (day) {
-            case "M", "W", "F" -> "MWF";
-            case "T", "TH", "S" -> "TTS";
-            default -> {
-                if (day.isEmpty())
-                    yield "Please insert a valid day.";
-                else
-                    yield "Looks like a Sunday.";
-            }
-        };
-
-        Assertions.assertEquals("Looks like a Sunday.", result);
-    }
-
-    @Test
-    public void switchWithoutArrow() {
+    public void switchUsingYield() {
         var me = 4;
         var operation = "squareMe";
         var result = switch (operation) {
@@ -53,7 +38,26 @@ class JEP325SwitchExpressionsTest {
         Assertions.assertEquals(16, result);
     }
 
-    // old switch can be used
+    @Test
+    void switchUsingYieldAndArrow() {
+        var day = "asado";
+        var result = switch (day) {
+            case "M", "W", "F" -> "MWF";
+            case "T", "TH", "S" -> "TTS";
+            default -> {
+                if (day.isEmpty())
+                    yield "Please insert a valid day.";
+                else
+                    yield "Looks like a Sunday.";
+            }
+        };
+
+        Assertions.assertEquals("Looks like a Sunday.", result);
+    }
+
+    // Old switch can be used
+    // Using the fall through condition
+    // using break
     @Test
     void switchOld() {
         var day = "asado";

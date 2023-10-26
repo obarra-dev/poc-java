@@ -10,26 +10,26 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-// TODO java20 and java 21 and 19
+// TODO add edge cases from java20 and 21 and 19
 // since java 17
 // JEP406, JEP420, JEP427, JEP433, JEP441
 class JEP406PatternMatchingForSwitchTest {
 
     @Test
     void patternMatchingMoreCases() {
-        assertEquals("1", asStringValue(BigDecimal.ONE));
-        assertEquals("12343242", asStringValue("12343242"));
-        assertEquals("123", asStringValue(123));
-        assertEquals("-999999999-01-01", asStringValue(LocalDate.MIN));
-        assertEquals("unknown", asStringValue(Double.MIN_VALUE));
+        assertEquals("1", getStringValue(BigDecimal.ONE));
+        assertEquals("12343242", getStringValue("12343242"));
+        assertEquals("123", getStringValue(123));
+        assertEquals("-999999999-01-01", getStringValue(LocalDate.MIN));
+        assertEquals("unknown", getStringValue(Double.MIN_VALUE));
 
         // if the switch does not check the null it throws a Null pointer, it does not happen using if with instanceof
         Assertions.assertThrows(NullPointerException.class, () -> {
-            asStringValue(null);
+            getStringValue(null);
         });
     }
 
-    private String asStringValue(Object anyValue) {
+    private String getStringValue(Object anyValue) {
         return switch (anyValue) {
             case String str -> str;
             case BigDecimal bd -> bd.toEngineeringString();
@@ -38,7 +38,6 @@ class JEP406PatternMatchingForSwitchTest {
             default -> "unknown";
         };
     }
-
 
     @Test
     void patternMatchingWithNull() {
@@ -75,6 +74,19 @@ class JEP406PatternMatchingForSwitchTest {
         };
     }
 
+    // Guard Clauses, using when
+    @Test
+    void patternMatchingCombiningWithConditional() {
+        Assertions.assertEquals(3.8, getDoubleValueUsingParenthesizedPatterns("3.8"));
+        Assertions.assertEquals(0.0, getDoubleValueUsingParenthesizedPatterns("##3.8"));
+    }
+
+    private static double getDoubleValueUsingParenthesizedPatterns(Object object) {
+        return switch (object) {
+            case String s when !s.isEmpty() && !(s.contains("#") || s.contains("@")) -> Double.parseDouble(s);
+            default -> 0d;
+        };
+    }
 
     @Test
     void patterMatchingWithSealedClassAndRecord() {
@@ -91,21 +103,6 @@ class JEP406PatternMatchingForSwitchTest {
         return switch (obj) {
             case TruckRecord truckRecord -> truckRecord.getRegistrationNumberByOverrideMethod();
             case CarRecord carRecord -> carRecord.getRegistrationNumberByOverrideMethod();
-        };
-    }
-
-    // Also known as Guard Clauses, using when
-    @Test
-    void patternMatchingCombiningWithConditional() {
-        Assertions.assertEquals(3.8, getDoubleValueUsingParenthesizedPatterns("3.8"));
-        Assertions.assertEquals(0.0, getDoubleValueUsingParenthesizedPatterns("##3.8"));
-    }
-
-
-    private static double getDoubleValueUsingParenthesizedPatterns(Object object) {
-        return switch (object) {
-            case String s when !s.isEmpty() && !(s.contains("#") || s.contains("@")) -> Double.parseDouble(s);
-            default -> 0d;
         };
     }
 

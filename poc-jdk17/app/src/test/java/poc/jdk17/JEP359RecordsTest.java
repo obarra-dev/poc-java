@@ -3,6 +3,9 @@ package poc.jdk17;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+// the class is final
+// the methods are final
+// getters, equal, hashcode, toString methods are by default
 // since java 14
 // JEP359, JEP384, JEP395
 class JEP359RecordsTest {
@@ -12,7 +15,7 @@ class JEP359RecordsTest {
         UserRecord userRecord = new UserRecord(10, "UserOne");
 
         // it does not compile, it is immutable
-        // user.id = 12323;
+        // userRecord.id = 12323;
         Assertions.assertEquals(10, userRecord.id());
         Assertions.assertEquals("UserOne", userRecord.password());
     }
@@ -34,13 +37,13 @@ class JEP359RecordsTest {
     @Test
     void recordTest() {
         var person = new PersonRecord("Omar", 29);
+        Assertions.assertNotNull(person.hashCode());
         Assertions.assertEquals("Omar", person.firstName());
         Assertions.assertEquals(29, person.age());
         Assertions.assertEquals("OMAR", person.getNickName());
-        Assertions.assertEquals("Person[firstName=Omar, age=29]", person.toString());
+        Assertions.assertEquals("PersonRecord[firstName=Omar, age=29]", person.toString());
         Assertions.assertTrue(person.equals(new PersonRecord("Omar", 29)));
         Assertions.assertFalse(person.equals(new PersonRecord("Omarx", 29)));
-        Assertions.assertNotNull(person.hashCode());
     }
 
     /**

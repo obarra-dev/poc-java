@@ -9,10 +9,15 @@ import java.util.Optional;
 
 // Sealed Classes and Interfaces in Java
 // The main motivation behind sealed classes is to have the possibility for a superclass to be widely accessible but not widely extensible
+// Sealed classes are commonly used in situations where you want to represent a restricted set of possibilities
 // Constrains
 //All permitted subclasses must belong to the same module as the sealed class.
 //Every permitted subclass must explicitly extend the sealed class.
 //Every permitted subclass must define a modifier: final, sealed, or non-sealed.
+
+// TODO find use cases? A Result that permit just Success or Error
+// Common use cases might include implementing a State Machine or in Monadic Programming, (functional programming concepts)
+
 // since java 15
 // JEP360, JEP397
 class JEP360SealedClassesTest {
@@ -46,8 +51,6 @@ class JEP360SealedClassesTest {
         return result;
     }
 
-
-    //
     @Test
     void patterMatchingWithSealedClass() {
         var result = getRegistrationNumberByOverrideMethodUsingVehicleSealedAbstractClass(new CarNonSealedClass("123"));
@@ -100,7 +103,6 @@ class JEP360SealedClassesTest {
         return result;
     }
 
-    // TODO difference sealed and final??
     @Test
     void patterMatchingWithNoSealedClasses() {
         PersonAbstractClass person = new EmployeeFinal();

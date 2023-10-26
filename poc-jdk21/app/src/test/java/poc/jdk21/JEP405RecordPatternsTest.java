@@ -6,22 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-// TODO java 20
+// TODO java 20 edge cases
 // since java 19
 // JEP405, JEP432
 class JEP405RecordPatternsTest {
-
-    @Test
-    void recordPatternWithInstanceof() {
-        Object object = new PersonRecord("omar", 12);
-
-        if (object instanceof PersonRecord personRecord) {
-            assertEquals(new PersonRecord("omar", 12), personRecord);
-            assertEquals(PersonRecord.class, personRecord.getClass());
-        } else {
-            fail();
-        }
-    }
 
     // deconstruct
     @Test
@@ -42,7 +30,6 @@ class JEP405RecordPatternsTest {
 
         if (object instanceof CarRecord(String reg)) {
             assertEquals("123", reg);
-
         } else {
             fail();
         }

@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 // since java 10
-class JEP286VarTest {
+class JEP286LocalVariableTypeInferenceTest {
 
-    // Local Variable Type Inference
+    // The compiler infers the type of the variable using the value provided.
     @Test
     void varExample() {
-        var list = List.of("Java", "Kotlin", " ");
+        var list = List.of("Java", "Kotlin", "Golang");
         // list = "somestring"; does not compile
-        List<String> listExpected = List.of("Java", "Kotlin", " ");
+        List<String> listExpected = List.of("Java", "Kotlin", "Golang");
         Assertions.assertEquals(listExpected, list);
         Assertions.assertEquals("java.util.ImmutableCollections$ListN", list.getClass().getName());
 

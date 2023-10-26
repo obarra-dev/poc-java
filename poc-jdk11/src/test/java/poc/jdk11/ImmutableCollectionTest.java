@@ -10,26 +10,28 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 // since java 9
+// static factory methods on the List, Set, and Map interfaces let you easily create unmodifiable lists, sets, and maps
+// avoid  side effects
 class ImmutableCollectionTest {
 
     @Test
     void listOf() {
         var immutable = List.of("Java", "Kotlin");
 
-        Assertions.assertEquals("java.util.ImmutableCollections$List12", immutable.getClass().getName());
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             immutable.add("Golang");
         });
+        Assertions.assertEquals("java.util.ImmutableCollections$List12", immutable.getClass().getName());
     }
 
     @Test
     void setOf() {
         var immutable = Set.of("Java", "Kotlin");
 
-        Assertions.assertEquals("java.util.ImmutableCollections$Set12", immutable.getClass().getName());
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
             immutable.add("Golang");
         });
+        Assertions.assertEquals("java.util.ImmutableCollections$Set12", immutable.getClass().getName());
     }
 
     // TODO use with Map.Entry
@@ -37,10 +39,10 @@ class ImmutableCollectionTest {
     void mapOf() {
         var immutable = Map.of("Java", "cool", "Kotlin", "nice");
 
-        Assertions.assertEquals("java.util.ImmutableCollections$MapN", immutable.getClass().getName());
         Assertions.assertThrows(UnsupportedOperationException.class, () -> {
-            immutable.put("Golang", "best");
+            immutable.put("Golang", "a good option");
         });
+        Assertions.assertEquals("java.util.ImmutableCollections$MapN", immutable.getClass().getName());
     }
 
 }
