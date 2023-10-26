@@ -10,7 +10,8 @@ class CollectionTest {
     @Test
     void toArrayUseWithIntFunction() {
         // new default function toArray
-        var result = List.of("apple", "banana", "orange").toArray(String[]::new);
+        var collection = List.of("apple", "banana", "orange");
+        var result = collection.toArray(String[]::new);
         String[] expected = {"apple", "banana", "orange"};
         Assertions.assertArrayEquals(expected, result);
     }

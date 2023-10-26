@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-class FileTest {
+class FilesTest {
 
     @Test
     void writeString() throws IOException {
