@@ -17,4 +17,4 @@ package poc.jdk21;
  * // @end
  * }
  */
-class JEP413CodeSnippetsinJavaAPIDocumentationTest {}
+class JEP413CodeSnippetsInJavaAPIDocumentationTest {}
