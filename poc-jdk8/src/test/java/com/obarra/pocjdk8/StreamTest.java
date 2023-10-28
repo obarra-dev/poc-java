@@ -73,6 +73,46 @@ public class StreamTest {
         assertArrayEquals(expected, noNestedStructure.toArray());
     }
 
+    @Test
+    public void flatMapWhenHasNestedStructureUsingCustomMappingFunction() {
+        List<List<String>> list = Arrays.asList(Arrays.asList("a"),
+                Arrays.asList("b"),
+                Arrays.asList("c"));
+
+        List<String> noNestedStructure = list.stream()
+                .flatMap(l -> l.stream())
+                .collect(Collectors.toList());
+
+        String[] expected = {"a", "b", "c"};
+        assertArrayEquals(expected, noNestedStructure.toArray());
+    }
+
+    @Test
+    public void flatMapUsingCustomMappingFunction() {
+        List<String> list = Arrays.asList("a", "b", "c");
+
+        List<String> collect = list.stream()
+                .flatMap(e -> Stream.of(e.toLowerCase(), e.toUpperCase()))
+                .collect(Collectors.toList());
+
+        String[] expected = {"a", "A", "b", "B", "c", "C"};
+        assertArrayEquals(expected, collect.toArray());
+    }
+
+    @Test
+    public void flatMapWhenIsLikeAMap() {
+        List<String> list = Arrays.asList("a", "b", "c");
+
+        // in this case the flapMap acts as a map but it is creating a Stream which has overhead
+        List<String> collect = list.stream()
+                .flatMap(e -> Stream.of(e.toUpperCase()))
+                .collect(Collectors.toList());
+
+        String[] expected = {"A", "B", "C"};
+        assertArrayEquals(expected, collect.toArray());
+    }
+
+
     /**
      * Se ejecuto de forma secuencial porque el origen del Stream es List el cual es por definicion ordenada
      * El collecto deberia tener como minimo la caracteristica UNORDENRED

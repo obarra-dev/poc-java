@@ -15,7 +15,7 @@ class JEP359RecordsTest {
         UserRecord userRecord = new UserRecord(10, "UserOne");
 
         // it does not compile, it is immutable
-        // userRecord.id = 12323;
+       // userRecord.id = 12323;
         Assertions.assertEquals(10, userRecord.id());
         Assertions.assertEquals("UserOne", userRecord.password());
     }

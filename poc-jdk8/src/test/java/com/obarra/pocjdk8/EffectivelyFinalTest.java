@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,13 @@ import java.util.stream.Collectors;
 public class EffectivelyFinalTest {
 
     @Test
-    void effectiveFinalInMap() {
+    void effectiveFinalInMapLambdaExpression() {
         List<String> names = Arrays.asList("omar", "barra");
+        // lastName is effectively final here
         String lastName = "maru";
+
+        // if I do it lastName lost its effectively final and ".map(x -> lastName)" does not compile
+        // lastName = "other name";
         List<String> result = names.stream()
                 .map(x -> lastName)
                 .collect(Collectors.toList());
@@ -28,28 +33,16 @@ public class EffectivelyFinalTest {
     }
 
     @Test
-    void effectiveFinalInRunnableLambdaExpression() throws InterruptedException {
-        AtomicReference<String> effectiveFinal = new AtomicReference<>("I am non final local variable");
-        Runnable runnable = () -> {
-            System.out.println(effectiveFinal.get());
-            effectiveFinal.set("ValueChanged");
-        };
-
-        Thread thread = new Thread(runnable);
-        thread.start();
-
-        thread.join();
-        Assertions.assertEquals("ValueChanged", effectiveFinal.get());
-    }
-
-    @Test
-    void effectiveFinalInRunnableInnerAnonymousClass() throws InterruptedException {
-        AtomicReference<String> effectiveFinal = new AtomicReference<>("I am non final local variable");
+    void effectiveFinalInAnonymousClass() throws InterruptedException {
+        // name is effectively final here
+        String name = "omar";
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                System.out.println(effectiveFinal.get());
-                effectiveFinal.set("ValueChanged");
+                System.out.println(name);
+
+                // if I do it name lost its effectively final
+                //name = "sdfs";
             }
         };
 
@@ -57,7 +50,60 @@ public class EffectivelyFinalTest {
         thread.start();
 
         thread.join();
-        Assertions.assertEquals("ValueChanged", effectiveFinal.get());
+        Assertions.assertEquals("omar", name);
     }
 
+    // It’s not a good practice to modify variables used in lambda expressions and anonymous classes.
+    // But there’s an alternative approach that allows us to modify variables in such cases that achieves thread-safety through atomicity.
+    // AtomicReference and AtomicInteger
+    @Test
+    void atomicReferenceInRunnableLambdaExpression() throws InterruptedException {
+        //  We can use AtomicReference to atomically modify variables inside lambda expressions
+        AtomicReference<String> modifiableVariable = new AtomicReference<>("I am non final local variable");
+        Runnable runnable = () -> {
+            System.out.println(modifiableVariable.get());
+            modifiableVariable.set("ValueChanged");
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        thread.join();
+        Assertions.assertEquals("ValueChanged", modifiableVariable.get());
+    }
+
+    @Test
+    void atomicReferenceInRunnableInnerAnonymousClass() throws InterruptedException {
+        //  We can use AtomicReference to atomically modify variables inside InnerAnonymousClass
+        AtomicReference<String> modifiableVariable = new AtomicReference<>("I am non final local variable");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(modifiableVariable.get());
+                modifiableVariable.set("ValueChanged");
+            }
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        thread.join();
+        Assertions.assertEquals("ValueChanged", modifiableVariable.get());
+    }
+
+    @Test
+    void atomicIntegerInRunnableLambdaExpression() throws InterruptedException {
+        //  We can use AtomicReference to atomically modify variables inside lambda expressions
+        AtomicInteger modifiableVariable = new AtomicInteger(10);
+        Runnable runnable = () -> {
+            System.out.println(modifiableVariable.get());
+            modifiableVariable.set(11);
+        };
+
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        thread.join();
+        Assertions.assertEquals(11, modifiableVariable.get());
+    }
 }

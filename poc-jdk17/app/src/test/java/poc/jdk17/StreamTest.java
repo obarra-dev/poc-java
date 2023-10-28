@@ -4,9 +4,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class StreamTest {
 
@@ -30,4 +34,29 @@ class StreamTest {
         Assertions.assertEquals(List.of(2.02, 4.04), evenDoubles);
     }
 
+    // Example  replacing each string in a stream with its uppercased and lowercased versions
+
+    // this is the new recommendable and new way, less overhead
+    @Test
+    void usingMapMulti() {
+        List<String> list = Stream.of("Omar", "Barra")
+                .<String>mapMulti((stringValue, consumer) -> {
+                    consumer.accept(stringValue.toUpperCase());
+                    consumer.accept(stringValue.toLowerCase());
+                })
+                .toList();
+
+        Assertions.assertEquals(List.of("OMAR", "omar", "BARRA", "barra"), list);
+    }
+
+    // this is the old way
+    @Test
+    void usingFlatmapOldWay() {
+        List<String> list = Stream.of("Omar", "Barra")
+                // flatmap hast overhead of creating new streams per group of result elements
+                .flatMap(stringValue -> Stream.of(stringValue.toUpperCase(), stringValue.toLowerCase()))
+                .toList();
+
+        Assertions.assertEquals(List.of("OMAR", "omar", "BARRA", "barra"), list);
+    }
 }
