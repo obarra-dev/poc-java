@@ -1,4 +1,4 @@
-package poc.jdk21.beyond;
+package poc.jdk25;
 
 public class App {
     public String getGreeting() {

@@ -19,7 +19,7 @@ java {
 }
 
 application {
-    mainClass.set("poc.jdk21.beyond.App")
+    mainClass.set("poc.jdk25.App")
 }
 
 tasks.named<Test>("test") {

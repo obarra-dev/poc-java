@@ -1,8 +1,7 @@
-package poc.jdk21.beyond;
+package poc.jdk25;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
 
