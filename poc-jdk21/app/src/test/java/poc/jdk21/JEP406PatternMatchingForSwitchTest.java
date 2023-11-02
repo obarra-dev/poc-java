@@ -29,6 +29,10 @@ class JEP406PatternMatchingForSwitchTest {
         });
     }
 
+
+    // The compiler performs an “analysis of exhaustiveness” for Pattern Matching for switch.
+    // That means the switch statement or expression must cover all possible cases – or contain a default branch.
+    // Since the Object class in the example above is arbitrarily extensible, a default branch is mandatory.
     private String getStringValue(Object anyValue) {
         return switch (anyValue) {
             case String str -> str;
@@ -99,6 +103,7 @@ class JEP406PatternMatchingForSwitchTest {
 
     // default is no needed because we cover all possible input
     // the compiles infers if we cover all the possible input
+    // a default branch is not necessary if the switch covers all possibilities of a sealed class hierarchy
     private static String getRegistrationNumberByOverrideMethod(VehicleSealedInterface obj) {
         return switch (obj) {
             case TruckRecord truckRecord -> truckRecord.getRegistrationNumberByOverrideMethod();
@@ -179,4 +184,27 @@ class JEP406PatternMatchingForSwitchTest {
             case TarotClass t -> t.getClass().getName();
         };
     }
+
+    @Test
+    void switchExpressionOverEnumConstants() {
+        Assertions.assertEquals("Flying north", getStringFromEnum(CompassDirectionEnum.NORTH));
+        Assertions.assertEquals("Flying south", getStringFromEnum(CompassDirectionEnum.SOUTH));
+        Assertions.assertEquals("Flying east", getStringFromEnum(CompassDirectionEnum.EAST));
+        Assertions.assertEquals("Flying west", getStringFromEnum(CompassDirectionEnum.WEST));
+        Assertions.assertEquals("Gaining altitude", getStringFromEnum(VerticalDirectionEnum.UP));
+        Assertions.assertEquals("Losing altitude", getStringFromEnum(VerticalDirectionEnum.DOWN));
+    }
+
+    private String getStringFromEnum(DirectionSealedInterface direction) {
+        return switch (direction) {
+            case CompassDirectionEnum.NORTH -> "Flying north";
+            case CompassDirectionEnum.SOUTH -> "Flying south";
+            case CompassDirectionEnum.EAST  -> "Flying east";
+            case CompassDirectionEnum.WEST  -> "Flying west";
+            case VerticalDirectionEnum.UP   -> "Gaining altitude";
+            case VerticalDirectionEnum.DOWN -> "Losing altitude";
+        };
+    }
+
+
 }
