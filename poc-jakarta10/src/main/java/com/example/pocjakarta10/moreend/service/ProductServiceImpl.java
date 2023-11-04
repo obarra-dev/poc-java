@@ -1,7 +1,6 @@
 package com.example.pocjakarta10.moreend.service;
 
 import com.example.pocjakarta10.moreend.model.Product;
-import jakarta.enterprise.inject.Model;
 import jakarta.inject.Named;
 
 import java.util.ArrayList;
