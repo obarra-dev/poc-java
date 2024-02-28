@@ -19,6 +19,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.zip.GZIPOutputStream;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,31 @@ public class FileTest {
             }
         }
         System.out.print(characterList);
+    }
+
+
+    @Test
+    void gzipOutputStream() throws IOException {
+        FileInputStream fis = new FileInputStream("/home/omarbarra/Downloads/assets-omar/omarrules.txt");
+
+        // Creating the compressed file
+        FileOutputStream fos = new FileOutputStream("/home/omarbarra/Downloads/assets-omar/compress.gz");
+
+        // Object of Fileoutstream passed
+        GZIPOutputStream gzipOS = new GZIPOutputStream(fos);
+        byte[] buffer = new byte[1024];
+        int len;
+
+        // Writing the data to file until -1 reached(End of file)
+        while ((len = fis.read(buffer)) != -1) {
+            gzipOS.write(buffer, 0, len);
+        }
+
+        // Closing the resources
+        // using standard close() method
+        gzipOS.close();
+        fos.close();
+        fis.close();
     }
 
     @Test
