@@ -19,6 +19,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.junit.jupiter.api.Assertions;
@@ -67,7 +68,8 @@ public class FileTest {
 
 
     @Test
-    void gzipOutputStream() throws IOException {
+    void gzipOutputStreamCompressed() throws IOException {
+        // file to compress
         FileInputStream fis = new FileInputStream("/home/omarbarra/Downloads/assets-omar/omarrules.txt");
 
         // Creating the compressed file
@@ -84,10 +86,30 @@ public class FileTest {
         }
 
         // Closing the resources
-        // using standard close() method
         gzipOS.close();
         fos.close();
         fis.close();
+    }
+
+    @Test
+    void gzipInputStreamDecompressed() throws IOException {
+        try (GZIPInputStream gis = new GZIPInputStream(Files.newInputStream(Paths.get("/home/omarbarra/Downloads/assets-omar/compress.gz")));
+             FileOutputStream fos = new FileOutputStream("/home/omarbarra/Downloads/assets-omar/omarrules-decompresed.txt")) {
+
+            // copy GZIPInputStream to FileOutputStream
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = gis.read(buffer)) > 0) {
+                fos.write(buffer, 0, len);
+            }
+        }
+    }
+
+    @Test
+    void gzipInputStreamDecompressedFilesCopy() throws IOException {
+        try (GZIPInputStream gis = new GZIPInputStream(Files.newInputStream(Paths.get("/home/omarbarra/Downloads/assets-omar/compress.gz")))) {
+            Files.copy(gis, Paths.get("/home/omarbarra/Downloads/assets-omar/omarrules-decompresed-copy.txt"));
+        }
     }
 
     @Test
