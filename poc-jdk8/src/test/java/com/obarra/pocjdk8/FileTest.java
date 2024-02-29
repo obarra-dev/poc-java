@@ -1,10 +1,13 @@
 package com.obarra.pocjdk8;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -18,14 +21,45 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 public class FileTest {
+
+    // ByteArrayOutputStream can be handy in situations where you have a component that outputs its data to an OutputStream,
+    // but where you need the data written as a byte array.
+    @Test
+    void byteArrayOutputStream() throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        // Writes data to the output stream
+        out.write("This is a line of text".getBytes());
+
+        String streamData = out.toString();
+        System.out.println("Output stream: " + streamData);
+
+        System.out.print("Data using toByteArray(): ");
+        // Returns an array of bytes
+        byte[] byteData = out.toByteArray();
+        for (byte byteDatum : byteData) {
+            System.out.print((char) byteDatum);
+        }
+        out.close();
+    }
+
+    @Test
+    void byteArrayInputStream() throws IOException {
+        int c;
+        ByteArrayInputStream bInput = new ByteArrayInputStream("This is a line of text".getBytes());
+
+        while ((c = bInput.read()) != -1) {
+            System.out.println(Character.toUpperCase((char) c));
+        }
+
+        bInput.reset();
+    }
+
+
     @Test
     void bufferedOutputStream() throws IOException {
         try (OutputStream out = Files.newOutputStream(Paths.get("/home/omarbarra/Downloads/assets-omar/omarrules.txt")); BufferedOutputStream bout = new BufferedOutputStream(out)) {
