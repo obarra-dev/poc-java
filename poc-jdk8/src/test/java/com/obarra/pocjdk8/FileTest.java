@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,10 +22,69 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class FileTest {
+
+
+    @Test
+    void randomAccessFile() throws IOException {
+
+        // file content is "ABCDEFGH"
+        String filePath = "source.txt";
+
+        System.out.println(new String(readCharsFromFile(filePath, 1, 5)));
+
+        writeData(filePath, "Data", 5);
+        //now file content is "ABCDEData"
+
+        appendData(filePath, "pankaj");
+        //now file content is "ABCDEDatapankaj"
+
+    }
+
+    private void appendData(String filePath, String data) throws IOException {
+        RandomAccessFile raFile = new RandomAccessFile(filePath, "rw");
+        raFile.seek(raFile.length());
+        System.out.println("current pointer = " + raFile.getFilePointer());
+        raFile.write(data.getBytes());
+        raFile.close();
+
+    }
+
+    private void writeData(String filePath, String data, int seek) throws IOException {
+        RandomAccessFile file = new RandomAccessFile(filePath, "rw");
+        file.seek(seek);
+        file.write(data.getBytes());
+        file.close();
+    }
+
+    private byte[] readCharsFromFile(String filePath, int seek, int chars) throws IOException {
+        RandomAccessFile file = new RandomAccessFile(filePath, "r");
+        file.seek(seek);
+        byte[] bytes = new byte[chars];
+        file.read(bytes);
+        file.close();
+        return bytes;
+    }
+
+    @Test
+    void readAndWritingFile() throws IOException {
+        Path path = Paths.get("/home/omarbarra/Downloads/assets-omar/omarrules.txt");
+        try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
+            // Do the replace operation
+            List<String> list = stream
+                    .map(line -> line.replaceAll("test", "new"))
+                    .collect(Collectors.toList());
+            // Write the content back
+            Files.write(path, list, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // ByteArrayOutputStream can be handy in situations where you have a component that outputs its data to an OutputStream,
     // but where you need the data written as a byte array.
