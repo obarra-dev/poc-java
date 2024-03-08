@@ -1,5 +1,6 @@
 package com.obarra.pocjdk8;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedInputStream;
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -15,12 +17,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,6 +34,38 @@ import java.util.zip.GZIPOutputStream;
 
 public class FileTest {
 
+    @Test
+    void sortedFiles() throws IOException {
+        try (Stream<Path> stream = Files.list(Paths.get("src/test/resources/FileTest"))) {
+            List<File> result = stream
+                    .map(Path::toFile)
+                    .sorted()
+                    .collect(Collectors.toList());
+            List<String> expected = Arrays.asList("audit-2024-02-07.log.gz", "audit-2024-02-08.log.gz", "audit.log", "json.json", "text.txt");
+            Assertions.assertIterableEquals(
+                    expected,
+                    result.stream().map(File::getName).collect(Collectors.toList()));
+        }
+    }
+
+    @Test
+    void getParent() {
+        Path path = Paths.get("./somefolder/audit.log");
+        Assertions.assertEquals("./somefolder", path.getParent().toString());
+    }
+
+    @Test
+    void toAbsolutePath() {
+        Path path = Paths.get("./somefolder/audit.log");
+        String currentDir = Paths.get("").toAbsolutePath().toString();
+        Assertions.assertEquals(currentDir + "/./somefolder/audit.log", path.toAbsolutePath().toString());
+    }
+
+    @Test
+    void createFolderAndFile() throws IOException {
+        Files.createDirectories(Paths.get("src/test/resources/FileTest/tmp"));
+        Files.write(Paths.get("src/test/resources/FileTest/tmp/log.log"), Collections.singletonList("line1"));
+    }
 
     @Test
     void randomAccessFile() throws IOException {
