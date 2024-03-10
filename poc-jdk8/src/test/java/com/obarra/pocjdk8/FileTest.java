@@ -35,6 +35,14 @@ import java.util.zip.GZIPOutputStream;
 public class FileTest {
 
     @Test
+    void existsFile() throws IOException {
+        Path path = Paths.get("does-not-exist.txt");
+        Assertions.assertFalse(Files.exists(path));
+
+        path = Paths.get("src/test/resources/FileTest/audit.log");
+        Assertions.assertTrue(Files.exists(path));
+    }
+
     void sortedFiles() throws IOException {
         try (Stream<Path> stream = Files.list(Paths.get("src/test/resources/FileTest"))) {
             List<File> result = stream
