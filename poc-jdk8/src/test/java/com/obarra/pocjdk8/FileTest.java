@@ -39,7 +39,13 @@ public class FileTest {
         Path path = Paths.get("does-not-exist.txt");
         Assertions.assertFalse(Files.exists(path));
 
+        path = Paths.get("src/test/resources/FileTestNotExist");
+        Assertions.assertFalse(Files.exists(path));
+
         path = Paths.get("src/test/resources/FileTest/audit.log");
+        Assertions.assertTrue(Files.exists(path));
+
+        path = Paths.get("src/test/resources/FileTest");
         Assertions.assertTrue(Files.exists(path));
     }
 
