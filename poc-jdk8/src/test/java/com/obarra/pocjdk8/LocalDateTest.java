@@ -9,14 +9,30 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class LocalDateTest {
+
+    @Test
+    void zonaIds() {
+        List<String> zones = ZoneId.getAvailableZoneIds()
+                .stream()
+                .filter(z -> z.equals("Etc/UCT") || z.equals("Etc/GMT-4"))
+                .collect(Collectors.toList());
+
+        Assertions.assertEquals(Arrays.asList("Etc/GMT-4", "Etc/UCT"), zones);
+        ZoneId zoneId = ZoneId.systemDefault();
+        Assertions.assertEquals("America/Argentina/Catamarca", zoneId.toString());
+    }
 
     @Test
     void zoneIdForLocalDateTime() {
         LocalDateTime localDateTimeUTC = LocalDateTime.now(ZoneId.of("UTC"));
         LocalDateTime localDateTimeLA = LocalDateTime.now(ZoneId.of("America/Los_Angeles"));
 
+        Assertions.assertNotEquals(localDateTimeUTC, localDateTimeLA);
         Assertions.assertEquals(localDateTimeUTC.getDayOfYear(), localDateTimeLA.plusHours(7).getDayOfYear());
         Assertions.assertEquals(localDateTimeUTC.getHour(), localDateTimeLA.plusHours(7).getHour());
     }
@@ -38,14 +54,6 @@ class LocalDateTest {
                 .toLocalDateTime();
 
         Assertions.assertEquals("2024-04-04T11:00:00", newDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-    }
-
-    @Test
-    void zonaIdSystemDefaultArgentina() {
-        ZoneId.getAvailableZoneIds().forEach(System.out::println);
-
-        ZoneId zoneId = ZoneId.systemDefault();
-        Assertions.assertEquals("America/Argentina/Catamarca", zoneId.toString());
     }
 
     @Test
