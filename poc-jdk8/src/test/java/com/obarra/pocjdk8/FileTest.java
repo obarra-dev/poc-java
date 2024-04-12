@@ -15,24 +15,98 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.io.UncheckedIOException;
+import java.io.SequenceInputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class FileTest {
+
+    @Test
+    void sequenceInputStream() throws IOException {
+        InputStream first = new FileInputStream("src/test/resources/FileTest/text.txt");
+        InputStream second = new FileInputStream("src/test/resources/FileTest/text2.txt");
+
+        List<Character> characterList = new ArrayList<>();
+        try (SequenceInputStream sequenceInputStream = new SequenceInputStream(first, second);
+             BufferedInputStream bin = new BufferedInputStream(sequenceInputStream)) {
+            int i;
+            while ((i = bin.read()) != -1) {
+                characterList.add((char) i);
+            }
+        }
+        System.out.print(characterList);
+    }
+
+
+    @Test
+    void sequenceInputStreamVector() throws IOException {
+        List<String> fileNames = Arrays.asList("src/test/resources/FileTest/text.txt",
+                "src/test/resources/FileTest/text2.txt",
+                "src/test/resources/FileTest/text3.txt");
+
+        Vector<InputStream> inputStreams = new Vector<>();
+        for (String fileName : fileNames) {
+            inputStreams.add(new FileInputStream(fileName));
+        }
+
+        List<Character> characterList = new ArrayList<>();
+        try (SequenceInputStream sequenceInputStream = new SequenceInputStream(inputStreams.elements());
+             BufferedInputStream bin = new BufferedInputStream(sequenceInputStream)) {
+            int i;
+            while ((i = bin.read()) != -1) {
+                characterList.add((char) i);
+            }
+        }
+        System.out.print(characterList);
+    }
+
+
+    @Test
+    void sequenceInputStreamVectorsss() throws IOException {
+        List<String> fileNames = Arrays.asList("src/test/resources/FileTest/text.txt",
+                "src/test/resources/FileTest/text2.txt",
+                "src/test/resources/FileTest/text3.txt");
+
+        Iterator<String> iterator = fileNames.iterator();
+        System.out.println(iterator.next());
+
+
+        Vector<InputStream> inputStreams = new Vector<>();
+        for (String fileName : fileNames) {
+            inputStreams.add(new FileInputStream(fileName));
+        }
+
+        List<Character> characterList = new ArrayList<>();
+        try (SequenceInputStream sequenceInputStream = new SequenceInputStream(inputStreams.elements());
+             BufferedInputStream bin = new BufferedInputStream(sequenceInputStream)) {
+            int i;
+            while ((i = bin.read()) != -1) {
+                characterList.add((char) i);
+            }
+        }
+        System.out.print(characterList);
+    }
 
     @Test
     void existsFile() throws IOException {

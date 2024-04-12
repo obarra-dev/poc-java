@@ -47,6 +47,7 @@ class ExecutorServiceTest {
     // corePoolSize = maximumPoolSize
     // keepAliveTime = 0.
     // This means that the number of threads in this thread pool is always the same
+    // use case:  when the workload is known in advance and predictable Workloads.
     @Test
     void newFixedThreadPoolCastingToThreadPoolExecutor() {
         // if the number of simultaneously running tasks is always less than or equal to two, they get executed right away.
@@ -85,7 +86,7 @@ class ExecutorServiceTest {
     // corePoolSize = 0
     // maximumPoolSize = Integer.MAX_VALUE
     // keepAliveTime = 60 s
-    // use case: when we have a lot of short-living tasks in our application
+    // use case: when we have a lot of short-living tasks in our application and unpredictable workloads
     @Test
     void newCachedThreadPool() {
         // the cached thread pool may grow without bounds to accommodate any number of submitted tasks
@@ -105,7 +106,8 @@ class ExecutorServiceTest {
         });
 
         Assertions.assertEquals(0, executor.getCorePoolSize());
-        Assertions.assertEquals(3, executor.getTaskCount());
+        Assertions.assertEquals(3, executor.getTaskCount()); // importan
+        Assertions.assertEquals(0, executor.getCompletedTaskCount()); // importan
         Assertions.assertEquals(Integer.MAX_VALUE, executor.getMaximumPoolSize());
         Assertions.assertEquals(0, executor.getCompletedTaskCount());
         Assertions.assertEquals(3, executor.getActiveCount());
