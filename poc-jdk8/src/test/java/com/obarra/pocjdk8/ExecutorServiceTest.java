@@ -1,5 +1,7 @@
 package com.obarra.pocjdk8;
 
+import com.obarra.pocjdk8.customthreadpool.PolicyEvaluationThreadPoolExecutor;
+import com.obarra.pocjdk8.customthreadpool.Task;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -67,13 +70,86 @@ class ExecutorServiceTest {
         });
 
         Assertions.assertEquals(2, executor.getCorePoolSize());
-        Assertions.assertEquals(3, executor.getTaskCount());
         Assertions.assertEquals(2, executor.getMaximumPoolSize());
-        Assertions.assertEquals(0, executor.getCompletedTaskCount());
-        Assertions.assertEquals(2, executor.getActiveCount());
+
+        // the current number of threads in the pool.
         Assertions.assertEquals(2, executor.getPoolSize());
+
+        // the approximate total number of tasks that have ever been scheduled for execution.
+        Assertions.assertEquals(3, executor.getTaskCount());
+        // the approximate number of threads that are actively executing tasks.
+        Assertions.assertEquals(2, executor.getActiveCount());
+        Assertions.assertEquals(0, executor.getCompletedTaskCount());
+
         Assertions.assertEquals(1, executor.getQueue().size());
     }
+
+    @Test
+    void customThreadPoolExecutor() {
+        PolicyEvaluationThreadPoolExecutor executor = new PolicyEvaluationThreadPoolExecutor();
+        executor.submit(() -> {
+            Thread.sleep(1000);
+            return null;
+        });
+        executor.submit(() -> {
+            Thread.sleep(1000);
+            return null;
+        });
+        executor.submit(() -> {
+            Thread.sleep(1000);
+            return null;
+        });
+
+        Assertions.assertEquals(200, executor.getCorePoolSize());
+        Assertions.assertEquals(200, executor.getMaximumPoolSize());
+
+        // the current number of threads in the pool.
+        Assertions.assertEquals(3, executor.getPoolSize());
+
+        // the approximate total number of tasks that have ever been scheduled for execution.
+        Assertions.assertEquals(3, executor.getTaskCount());
+        // the approximate number of threads that are actively executing tasks.
+        Assertions.assertEquals(3, executor.getActiveCount());
+        Assertions.assertEquals(0, executor.getCompletedTaskCount());
+
+        Assertions.assertEquals(0, executor.getQueue().size());
+    }
+
+
+
+    @Test
+    void customThreadPoolExecutor10_2() {
+        PolicyEvaluationThreadPoolExecutor executor = new PolicyEvaluationThreadPoolExecutor();
+
+        for (int i = 0; i < 10; i++) {
+            executor.submit(() -> {
+                Task.runActiveThread();
+                return null;
+            });
+        }
+
+        for (int i = 0; i < 2; i++) {
+            executor.submit(() -> {
+                Task.runIdleThread();
+                return null;
+            });
+        }
+
+        Assertions.assertEquals(200, executor.getCorePoolSize());
+        Assertions.assertEquals(200, executor.getMaximumPoolSize());
+
+        // the current number of threads in the pool.
+        Assertions.assertEquals(12, executor.getPoolSize());
+
+        // the approximate total number of tasks that have ever been scheduled for execution.
+        Assertions.assertEquals(12, executor.getTaskCount());
+        // the approximate number of threads that are actively executing tasks.
+        Assertions.assertEquals(12, executor.getActiveCount());
+        Assertions.assertEquals(0, executor.getCompletedTaskCount());
+
+        Assertions.assertEquals(0, executor.getQueue().size());
+    }
+
 
     @Test
     void newFixedThreadPoolWaitingBlockingResult() throws ExecutionException, InterruptedException {
@@ -88,7 +164,7 @@ class ExecutorServiceTest {
     // keepAliveTime = 60 s
     // use case: when we have a lot of short-living tasks in our application and unpredictable workloads
     @Test
-    void newCachedThreadPool() {
+    void newCachedThreadPool() throws ExecutionException, InterruptedException {
         // the cached thread pool may grow without bounds to accommodate any number of submitted tasks
         // when the threads are not needed anymore, they will be disposed of after 60 seconds of inactivity
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
@@ -96,22 +172,37 @@ class ExecutorServiceTest {
             Thread.sleep(1000);
             return null;
         });
-        executor.submit(() -> {
-            Thread.sleep(1000);
-            return null;
-        });
-        executor.submit(() -> {
-            Thread.sleep(1000);
+        Future<Object> submitTwo = executor.submit(() -> {
+            Thread.sleep(1000000);
             return null;
         });
 
+        executor.submit(() -> {
+            Thread.sleep(1000000);
+            return null;
+        });
+
+        Thread.sleep(500);
+
+
         Assertions.assertEquals(0, executor.getCorePoolSize());
-        Assertions.assertEquals(3, executor.getTaskCount()); // importan
-        Assertions.assertEquals(0, executor.getCompletedTaskCount()); // importan
         Assertions.assertEquals(Integer.MAX_VALUE, executor.getMaximumPoolSize());
-        Assertions.assertEquals(0, executor.getCompletedTaskCount());
-        Assertions.assertEquals(3, executor.getActiveCount());
+
+        // the current number of threads in the pool, current size of a thread pool, threadpool_current_size
         Assertions.assertEquals(3, executor.getPoolSize());
+
+        // the approximate total number of tasks that have ever been scheduled for execution, threadpool_scheduled_size
+        Assertions.assertEquals(3, executor.getTaskCount()); // important
+        // the approximate number of threads that are actively executing tasks in a thread pool, threadpool_active_size
+        Assertions.assertEquals(3, executor.getActiveCount());
+        Assertions.assertEquals(0, executor.getCompletedTaskCount()); // important
+
+        // need tests!!,  number of tasks in the queue of the threadpool
+        long tasksToDo = executor.getTaskCount() - executor.getCompletedTaskCount() - executor.getActiveCount();
+
+        //need tests!!,  For some reason though it does not always exclude all the cancelled tasks, only after some periodic clean ups. So I had to introduce a second counter:
+        long tasksToDo2 = executor.getQueue().stream().filter(t -> !((FutureTask) t).isDone()).count();
+
         Assertions.assertEquals(0, executor.getQueue().size());
     }
 

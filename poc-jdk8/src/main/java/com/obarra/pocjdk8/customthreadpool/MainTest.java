@@ -5,7 +5,7 @@ public class MainTest {
         PolicyEvaluationThreadPoolExecutor executor = new PolicyEvaluationThreadPoolExecutor();
 
         for (int i = 0; i < 10; i++) {
-            executor.submit(new Task());
+            executor.submit(new Task(false));
         }
 
         executor.shutdown();

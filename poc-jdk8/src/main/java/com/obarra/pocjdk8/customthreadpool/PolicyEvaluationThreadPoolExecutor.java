@@ -4,7 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-class PolicyEvaluationThreadPoolExecutor
+public class PolicyEvaluationThreadPoolExecutor
         extends TenantThreadPoolExecutor {
     // corePoolSize
     static final int THREAD_POOL_SIZE = 200;
