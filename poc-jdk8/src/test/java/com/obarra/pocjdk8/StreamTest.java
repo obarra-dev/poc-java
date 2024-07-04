@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,5 +130,61 @@ public class StreamTest {
                 .collect(Collectors.joining(","));
 
         assertEquals("1,2,3,4,5,6,7,8,9", joined);
+    }
+
+
+    @Test
+    public void parallelStreamShowThreadNamesInForEach() {
+        List<Integer> listOfNumbers = Arrays.asList(1, 2, 3, 4);
+        listOfNumbers.parallelStream().forEach(number ->
+            System.out.println("Value: " + number + " Thread: " + Thread.currentThread().getName())
+        );
+    }
+
+    @Test
+    public void parallelStreamShowThreadNamesInCollect() {
+        List<Integer> listOfNumbers = Arrays.asList(1, 2, 3, 4);
+        Map<Integer, Integer> collect = listOfNumbers.parallelStream()
+            .collect(Collectors.toMap(x -> x, x -> {
+                System.out.println("Value: " + x + " Thread: " + Thread.currentThread().getName());
+                return x * 2;
+            } ));
+
+        collect.forEach((x, y) ->  System.out.println(y));
+    }
+
+    @Test
+    public void parallelStreamCustom() {
+        List<Integer> listOfNumbers = Arrays.asList(1, 2, 3, 4);
+        Map<Integer, Integer> collect = StreamSupport.stream(listOfNumbers.spliterator(), true /* parallel */)
+            .flatMap(x -> {
+                System.out.println("IN FlatMat Value: " + x + " Thread: " + Thread.currentThread().getName());
+
+                return Stream.of(x, listOfNumbers.size() + x * 2);
+            })
+            .collect(Collectors.toMap(x -> x, x -> {
+                System.out.println("IN Collector Value: " + x + " Thread: " + Thread.currentThread().getName());
+                return x * 2;
+            }));
+
+        collect.forEach((x, y) ->  System.out.println(y));
+    }
+
+    @Test
+    public void parallelStreamWithDecorator() {
+        List<Integer> listOfNumbers = Arrays.asList(1, 2, 3, 4);
+        Map<Integer, Integer> collect = listOfNumbers.parallelStream()
+            .flatMap(new DecoratorFunction<>(x -> {
+                System.out.println("IN FlatMat Value: " + x + " Thread: " + Thread.currentThread().getName());
+
+                return Stream.of(x, listOfNumbers.size() + x * 2);
+            }))
+            .collect(Collectors.toMap(x -> x, x -> {
+                System.out.println("IN Collector Value: " + x + " Thread: " + Thread.currentThread().getName());
+                return x * 2;
+            }));
+
+
+        collect.forEach((x, y) ->  System.out.println(y));
     }
 }
