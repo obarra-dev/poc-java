@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,11 @@ public class CollectionsTest
 
     Date actual = Collections.max(list);
     Assertions.assertEquals(1010L, actual.getTime());
+  }
+
+  @Test
+  public void maxUsingEmptyList() {
+    Assertions.assertThrows(NoSuchElementException.class, () -> Collections.max(new ArrayList<>()));
   }
 
   @Test
