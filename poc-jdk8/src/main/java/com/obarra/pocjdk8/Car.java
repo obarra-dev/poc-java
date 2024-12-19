@@ -35,4 +35,11 @@ public class Car
     public int hashCode() {
         return Objects.hashCode(publishedAt);
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+            "publishedAt=" + publishedAt +
+            '}';
+    }
 }

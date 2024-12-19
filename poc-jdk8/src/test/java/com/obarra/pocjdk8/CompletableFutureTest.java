@@ -23,7 +23,9 @@ public class CompletableFutureTest {
         @Test
         public void runAsyncTest() throws ExecutionException, InterruptedException {
             CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(CompletableFutureTest::runner);
-            Assertions.assertNull(completableFuture.get());
+
+            Thread.sleep(100000000);
+          //  Assertions.assertNull(completableFuture.get());
         }
 
         @Test

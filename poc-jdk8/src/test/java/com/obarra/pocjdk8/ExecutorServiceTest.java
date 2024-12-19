@@ -82,6 +82,7 @@ class ExecutorServiceTest {
         Assertions.assertEquals(0, executor.getCompletedTaskCount());
 
         Assertions.assertEquals(1, executor.getQueue().size());
+        Assertions.assertEquals(Integer.MAX_VALUE -1, executor.getQueue().remainingCapacity());
     }
 
     @Test

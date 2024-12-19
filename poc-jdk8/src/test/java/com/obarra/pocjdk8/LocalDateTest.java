@@ -3,6 +3,8 @@ package com.obarra.pocjdk8;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,6 +12,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,5 +67,16 @@ class LocalDateTest {
                         .withZoneSameInstant(ZoneId.systemDefault());
         System.out.println(parse);
         System.out.println(parse.toLocalDateTime());
+    }
+
+
+    @Test
+    void tessssss() {
+        String s = "2022-03-04T17:54:17.000Z";
+        s = "2008-11-14T19:17:08";
+        s = "2022-10-08T07:23:58Z";
+        Date dd = Timestamp.from(LocalDateTime.parse(s, DateTimeFormatter.ISO_DATE_TIME).atZone(ZoneId.systemDefault()).toInstant());
+        System.out.println(dd);
+
     }
 }

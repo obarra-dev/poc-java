@@ -14,7 +14,8 @@ public class DecoratorFunction<T, R>
 
   @Override
   public R apply(T t) {
-    System.out.println("DecoratorFunction");
+    System.out.println("IN DecoratorFunction Thread: " + Thread.currentThread().getName());
+
     return wrapped.apply(t);
   }
 }
