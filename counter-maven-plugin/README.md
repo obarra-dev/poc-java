@@ -11,6 +11,8 @@ mvn counter:dependency-counter
 ## To run the plugin
 mvn com.obarra:counter-maven-plugin:1.0-SNAPSHOT:dependency-counter
 
+## To run the plugin without version, it works to run the plugin in the same project
+mvn com.obarra:counter-maven-plugin:dependency-counter
 
 ## how to use
 ```xml
