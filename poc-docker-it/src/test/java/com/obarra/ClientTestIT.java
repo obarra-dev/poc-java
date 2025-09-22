@@ -9,6 +9,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class ClientTestIT
@@ -30,13 +31,19 @@ public class ClientTestIT
   }
 
   @Test
-  public void test() throws Exception {
-    String responseBody = getRepos("/service/rest/v1/repositories");
+  public void testApi() throws Exception {
+    String responseBody = getData();
+
+    assertEquals("{\n" +
+        "  \"message\": \"Hello from your simple API!\",\n" +
+        "  \"status\": \"success\",\n" +
+        "  \"timestamp\": \"2025-04-04T22:25:00Z\"\n" +
+        "}\n", responseBody);
   }
 
 
-  private String getRepos(final String query) throws Exception {
-    HttpGet get = new HttpGet(uri.resolve(query));
+  private String getData() throws Exception {
+    HttpGet get = new HttpGet(uri.resolve("/data"));
     get.setHeader("Accept", "application/json");
     CloseableHttpClient http = HttpClientBuilder.create().build();
     return http.execute(get, new BasicResponseHandler());
