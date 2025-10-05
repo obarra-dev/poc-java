@@ -13,10 +13,16 @@ public class TaskController
         this.repository = repository;
     }
 
-    @GetMapping("")
-    public String index(Model model) {
-        model.addAttribute("tasks",repository.findAll());
-        return "index";
+    @GetMapping("/")
+    public String homePage() {
+        return "homePage";
     }
 
+    @GetMapping("/tasks")
+    public String tasks(Model model) {
+        var tasks= repository.findAll();
+        model.addAttribute("list", tasks);
+        model.addAttribute("message", "omar rules!!!");
+        return "tasksPage";
+    }
 }
