@@ -1,0 +1,25 @@
+{
+  "tasks": [
+    {
+      "title": "Do this first thing",
+      "owners": [
+        "omar barra"
+      ]
+    },
+    {
+      "title": "second task",
+      "owners": [
+        "omar barra",
+        "obarra"
+      ]
+    },
+    {
+      "title": "last task",
+      "owners": [
+        "omar barra",
+        "obarra",
+        "alberto"
+      ]
+    }
+  ]
+}
