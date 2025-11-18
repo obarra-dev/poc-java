@@ -9,13 +9,10 @@ public class Main2
   public static void main(String[] args) throws Exception {
     Server server = new Server(8089);
 
-    ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-    servletContextHandler.setContextPath("/");
-    server.setHandler(servletContextHandler);
-
-    // Add your servlet
     ServletHolder servletHolder = new ServletHolder(new BlockingServlet());
+    ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     servletContextHandler.addServlet(servletHolder, "/blocking-servlet");
+    server.setHandler(servletContextHandler);
 
     server.start();
     // Wait for the server to stop

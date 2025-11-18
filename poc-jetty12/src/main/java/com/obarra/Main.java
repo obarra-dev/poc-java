@@ -8,14 +8,15 @@ import org.eclipse.jetty.server.ServerConnector;
 public class Main
 {
   public static void main(String[] args) throws Exception {
-    Server server = new Server();
+    Server server = new Server(8088);
 
-    HttpConfiguration httpConfiguration = new HttpConfiguration();
-    HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfiguration);
-
-    ServerConnector connector = new ServerConnector(server, httpConnectionFactory);
-    connector.setPort(8089);
-    server.addConnector(connector);
+    // unnecessary for MyHandler but showing how to customize the connector
+    //HttpConfiguration httpConfiguration = new HttpConfiguration();
+    //HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfiguration);
+    //
+    //ServerConnector connector = new ServerConnector(server, httpConnectionFactory);
+    //connector.setPort(8089);
+    //server.addConnector(connector);
 
     server.setHandler(new MyHandler());
 
