@@ -7,7 +7,6 @@ import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class BatchConfig
@@ -22,8 +21,8 @@ public class BatchConfig
   @Bean
   Step createStep(JobRepository jobRepository) {
     return new StepBuilder(jobRepository)
-        .<String, String> chunk(10)
-        .allowStartIfComplete(true)
+        .<String, String> chunk(2)
+        .allowStartIfComplete(false)
         .reader(new CustomReader())
         .processor(new CustomProcessor())
         .writer(new CustomWriter())
