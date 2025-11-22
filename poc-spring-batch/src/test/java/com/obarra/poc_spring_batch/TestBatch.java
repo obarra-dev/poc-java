@@ -5,13 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.job.JobExecution;
 import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest
+@SpringBatchTest
 @EnableAutoConfiguration
 @TestPropertySource(locations = "classpath:application.properties")
 @ContextConfiguration(classes = BatchConfig.class)
