@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 class PocSpringBatchApplicationTests {
 
   @Autowired
+  // this is deprecated but I don't know the alternative yet
   private JobLauncherTestUtils jobLauncherTestUtils;
 
   @Test
